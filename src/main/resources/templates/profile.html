@@ -3,17 +3,15 @@
 
 <script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
 <script src="/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css"/>
-<link rel="stylesheet" href="css/common.css">
-
+<link rel="stylesheet" href="/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/common.css">
 <body>
-<!--导航栏-->
 <div th:insert="~{navigation::nav}"></div>
 <!--问题展示页面-->
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-            <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> 发现</h2>
+            <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> <span th:text="${sessionName}"></span></h2>
             <hr>
             <div class="media" th:each="question:${questions.getList()}">
                 <div class="media-left">
@@ -22,7 +20,7 @@
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading" ><a th:href="@{/question(id=${question.getId()})}" th:text="${question.getTitle()}"></a></h4>
+                    <h4 class="media-heading" th:text="${question.getTitle()}"></h4>
                     <span th:text="${question.getDescription()}"></span><br>
                     <span class="text-desc"><span th:text="${question.getCommentCount()}"></span>个回复.<span
                             th:text="${question.getViewCount()}"></span>次浏览.<span
@@ -34,26 +32,26 @@
                 <ul class="pagination">
                     <!--显示第一页-->
                     <li th:if="${questions.hasPreviousPage}">
-                        <a th:href="@{/(pageNo=1)}" aria-label="Previous">
+                        <a th:href="@{/profile/question(pageNo=1)}" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                     <!--显示上一页-->
+                    <!--显示上一页-->
                     <li th:if="${questions.hasPreviousPage}">
-                        <a th:href="@{/(pageNo=${questions.prePage})}" aria-label="Previous">
+                        <a th:href="@{/profile/question(pageNo=${questions.prePage})}" aria-label="Previous">
                             <span aria-hidden="true">&lt;</span>
                         </a>
                     </li>
 
                     <!--显示页数-->
                     <li th:each="pages:${questions.getNavigatepageNums()}" >
-                        <a th:href="@{/(pageNo=${pages})}" th:text="${pages}">
+                        <a th:href="@{/profile/question(pageNo=${pages})}" th:text="${pages}">
                             <span aria-hidden="true">&lt;</span>
                         </a>
                     </li>
                     <!--最后一个-->
                     <li th:if="${questions.hasNextPage}">
-                        <a th:href="@{/(pageNo=${questions.getPages()})}" aria-label="Next">
+                        <a th:href="@{/profile/question(pageNo=${questions.getPages()})}" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
@@ -61,9 +59,16 @@
             </nav>
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <h3>问题发起指南</h3>
+            <div class="list-group section">
+                <a href="/profile/question"
+                   th:class="${sessionTag=='question'}? 'active list-group-item':'list-group-item'">我的问题</a>
+                <a href="/profile/replies"
+                   th:class="${sessionTag == 'replies'}? 'active list-group-item':'list-group-item'">
+                    最新回复
+                 <!--   <span class="badge" th:text="${session.unreadCount}"></span>-->
+                </a>
+            </div>
         </div>
     </div>
-
 </body>
 </html>
